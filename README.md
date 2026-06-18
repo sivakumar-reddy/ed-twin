@@ -7,7 +7,11 @@ The model answers a question hospitals actually argue about. When the ED is
 crowded, what fixes it? The common answer is more beds. This model says
 otherwise.
 
-![Bottleneck ranking: physician capacity is the binding constraint](docs/images/bottleneck_ranking.png)
+\*\*▶ \[Try the live demo](https://ed-twin.vercel.app)\*\* — drag the levers and watch what moves length of stay.
+
+
+
+!\[Bottleneck ranking: physician capacity is the binding constraint](docs/images/bottleneck\_ranking.png)
 
 ## The finding
 
@@ -19,7 +23,7 @@ effect scales with load in the direction queueing theory predicts.
 
 The point of the twin is that this conclusion is reached, and quantified with a
 confidence interval, without touching a real department. Full method and
-numbers are in [docs/bottleneck_analysis.md](docs/bottleneck_analysis.md).
+numbers are in [docs/bottleneck\_analysis.md](docs/bottleneck_analysis.md).
 
 ## How it works
 
@@ -31,14 +35,14 @@ priority at each stage.
 The analysis treats each scenario as a controlled experiment rather than a
 single run:
 
-- **Replications.** Each scenario runs across 30 seeded replications, so the
-  comparison is between distributions, not single noisy weeks.
-- **Common random numbers.** Every scenario sees the same set of arrival
-  streams, so the paired difference isolates the intervention from seed luck
-  and tightens the confidence intervals.
-- **Confidence intervals.** Each effect is reported as a mean change with a 95%
-  interval; an interval that excludes zero marks a real effect rather than
-  noise.
+* **Replications.** Each scenario runs across 30 seeded replications, so the
+comparison is between distributions, not single noisy weeks.
+* **Common random numbers.** Every scenario sees the same set of arrival
+streams, so the paired difference isolates the intervention from seed luck
+and tightens the confidence intervals.
+* **Confidence intervals.** Each effect is reported as a mean change with a 95%
+interval; an interval that excludes zero marks a real effect rather than
+noise.
 
 This is what separates a working simulator from a usable decision tool: it does
 not just describe the ED, it ranks the levers that change its throughput.
@@ -49,21 +53,20 @@ From the project root with the virtual environment active:
 
 ```
 # Compare baseline against a single intervention
-python -m scripts.07_run_scenarios --beds 45
+python -m scripts.07\_run\_scenarios --beds 45
 
 # Find the binding constraint: sweep every lever under load
-python -m scripts.07_run_scenarios --sweep --load 12
+python -m scripts.07\_run\_scenarios --sweep --load 12
 
 # Repeat at a lighter load as a sensitivity check
-python -m scripts.07_run_scenarios --sweep --load 15
+python -m scripts.07\_run\_scenarios --sweep --load 15
 ```
 
 Each run prints a comparison table and writes a tidy CSV to `data/scenarios/`.
 
 ## Stack
 
-Python, PostgreSQL, SimPy for the simulation engine, pandas for metrics, with a
-FastAPI and Next.js interactive layer in progress.
+Python, PostgreSQL, and SimPy for the simulation engine, pandas for metrics, and a Next.js interactive layer deployed on Vercel.
 
 ## Data
 
@@ -73,9 +76,9 @@ dataset from PhysioNet (credentialing in progress).
 
 ## Status
 
-Simulation engine and prescriptive scenario analysis complete. Interactive web
-app and MIMIC-IV calibration in progress.
+Simulation engine, prescriptive scenario analysis, and interactive web app complete and deployed at ed-twin.vercel.app. MIMIC-IV calibration in progress.
 
 ## Author
 
 Sivakumar Reddy Yenna  ·  [LinkedIn](https://linkedin.com/in/sivakumar-reddy-yenna)  ·  [GitHub](https://github.com/sivakumar-reddy)
+
