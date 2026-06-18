@@ -1,38 +1,81 @@
-\# ed-twin
+# ed-twin
 
+A digital twin of a hospital emergency department: a software model accurate
+enough to test operational changes before committing them in a real department.
 
+The model answers a question hospitals actually argue about. When the ED is
+crowded, what fixes it? The common answer is more beds. This model says
+otherwise.
 
-Emergency Department Digital Twin. A software model of an ED accurate enough to test operational interventions before deploying them in a real hospital.
+![Bottleneck ranking: physician capacity is the binding constraint](docs/images/bottleneck_ranking.png)
 
+## The finding
 
+Across simulated load, the binding constraint on throughput is **physician
+capacity, not beds.** A single additional physician cuts median length of stay
+by about five hours under heavy load. Five additional ED beds produce no
+measurable change. The result holds at two different arrival rates and the
+effect scales with load in the direction queueing theory predicts.
 
-\## Status
+The point of the twin is that this conclusion is reached, and quantified with a
+confidence interval, without touching a real department. Full method and
+numbers are in [docs/bottleneck_analysis.md](docs/bottleneck_analysis.md).
 
+## How it works
 
+The model is a discrete event simulation of patient flow through the ED:
+arrival, triage, bed placement, physician assessment, and either discharge or
+admission with inpatient boarding. Patients carry an acuity level that drives
+priority at each stage.
 
-Active development. Phase 1 of 6.
+The analysis treats each scenario as a controlled experiment rather than a
+single run:
 
+- **Replications.** Each scenario runs across 30 seeded replications, so the
+  comparison is between distributions, not single noisy weeks.
+- **Common random numbers.** Every scenario sees the same set of arrival
+  streams, so the paired difference isolates the intervention from seed luck
+  and tightens the confidence intervals.
+- **Confidence intervals.** Each effect is reported as a mean change with a 95%
+  interval; an interval that excludes zero marks a real effect rather than
+  noise.
 
+This is what separates a working simulator from a usable decision tool: it does
+not just describe the ED, it ranks the levers that change its throughput.
 
-\## Stack
+## Run it
 
+From the project root with the virtual environment active:
 
+```
+# Compare baseline against a single intervention
+python -m scripts.07_run_scenarios --beds 45
 
-Python · PostgreSQL · FastAPI · SimPy · pm4py · DoWhy · PuLP · Next.js · TypeScript · Tailwind
+# Find the binding constraint: sweep every lever under load
+python -m scripts.07_run_scenarios --sweep --load 12
 
+# Repeat at a lighter load as a sensitivity check
+python -m scripts.07_run_scenarios --sweep --load 15
+```
 
+Each run prints a comparison table and writes a tidy CSV to `data/scenarios/`.
 
-\## Data
+## Stack
 
+Python, PostgreSQL, SimPy for the simulation engine, pandas for metrics, with a
+FastAPI and Next.js interactive layer in progress.
 
+## Data
 
-Built on synthetic data from Synthea for the development pipeline, validated on MIMIC-IV-ED for final analysis (credentialing in progress).
+The development pipeline is built on synthetic ED encounters from Synthea.
+Final calibration uses MIMIC-IV-ED, the de-identified emergency department
+dataset from PhysioNet (credentialing in progress).
 
+## Status
 
+Simulation engine and prescriptive scenario analysis complete. Interactive web
+app and MIMIC-IV calibration in progress.
 
-\## Author
+## Author
 
-
-
-Sivakumar Reddy Yenna · \[LinkedIn](https://linkedin.com/in/sivakumar-reddy-yenna) · \[GitHub](https://github.com/sivakumar-reddy)
-
+Sivakumar Reddy Yenna  ·  [LinkedIn](https://linkedin.com/in/sivakumar-reddy-yenna)  ·  [GitHub](https://github.com/sivakumar-reddy)
