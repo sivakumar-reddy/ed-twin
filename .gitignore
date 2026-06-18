@@ -1,0 +1,46 @@
+# === Data ===
+# Generated synthetic data should never be committed
+data/raw/csv/
+data/raw/fhir/
+data/processed/
+data/interim/
+*.csv
+
+# === Synthea ===
+# Synthea is a separate cloned project, not part of ed-twin
+synthea/
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+
+# === Jupyter ===
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# === Environment / secrets ===
+.env
+.env.local
+*.secret
+credentials.json
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+
+# === OS ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Logs ===
+*.log
+logs/
