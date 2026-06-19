@@ -85,6 +85,13 @@ dataset from PhysioNet (credentialing in progress).
 Simulation engine, prescriptive scenario analysis, and interactive web app
 complete and deployed at ed-twin.vercel.app. MIMIC-IV calibration in progress.
 
-## Author
+## Contact
 
-Sivakumar Reddy Yenna  ·  [LinkedIn](https://linkedin.com/in/sivakumar-reddy-yenna)  ·  [GitHub](https://github.com/sivakumar-reddy)
+**Sivakumar Reddy Yenna** Recent MS in Management Information Systems, Northern Illinois University
+
+Open to **Business Analyst, BI Analyst, RevOps Analyst, Healthcare / Operations Analyst and Marketing Analyst** roles in the **Chicago metro area or anywhere in the US**.
+
+- **Email:** <reddysivakumar1361@gmail.com>
+- **LinkedIn:** [linkedin.com/in/sivakumar-reddy-yenna](https://www.linkedin.com/in/sivakumar-reddy-yenna)
+- **Other projects:** [Logistics Analytics Dashboard](https://github.com/sivakumar-reddy/logistics-analytics) · [RevOps Customer Segmentation](https://github.com/sivakumar-reddy/revops-customer-segmentation)
+
