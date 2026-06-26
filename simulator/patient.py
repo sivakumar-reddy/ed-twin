@@ -35,6 +35,9 @@ class Patient:
     bed_assigned_time:       Optional[float] = None
     treatment_start_time:    Optional[float] = None
     treatment_end_time:      Optional[float] = None
+    # Diagnostic workup window: physician released, ED bed still held.
+    diagnostic_start_time:   Optional[float] = None
+    diagnostic_end_time:     Optional[float] = None
     disposition_decision_time: Optional[float] = None
     departure_time:          Optional[float] = None
 
@@ -84,6 +87,18 @@ class Patient:
         return self.treatment_start_time - self.arrival_time
 
     @property
+    def diagnostic_time_minutes(self) -> Optional[float]:
+        """
+        Time spent in diagnostic workup (labs, imaging, consults). During this
+        window the physician is released but the ED bed is still held, so this
+        is the component of length of stay that does NOT consume physician time.
+        Returns None until the workup completes.
+        """
+        if self.diagnostic_start_time is None or self.diagnostic_end_time is None:
+            return None
+        return self.diagnostic_end_time - self.diagnostic_start_time
+
+    @property
     def total_los_minutes(self) -> Optional[float]:
         """Total length of stay in the ED."""
         if self.departure_time is None:
@@ -119,6 +134,8 @@ class Patient:
             "bed_assigned_time":        self.bed_assigned_time,
             "treatment_start_time":     self.treatment_start_time,
             "treatment_end_time":       self.treatment_end_time,
+            "diagnostic_start_time":    self.diagnostic_start_time,
+            "diagnostic_end_time":      self.diagnostic_end_time,
             "disposition_decision_time": self.disposition_decision_time,
             "departure_time":           self.departure_time,
             "admitted_to_inpatient":    self.admitted_to_inpatient,
@@ -126,6 +143,7 @@ class Patient:
             "door_to_triage_minutes":   self.door_to_triage_minutes,
             "door_to_bed_minutes":      self.door_to_bed_minutes,
             "door_to_doc_minutes":      self.door_to_doc_minutes,
+            "diagnostic_time_minutes":  self.diagnostic_time_minutes,
             "total_los_minutes":        self.total_los_minutes,
             "boarding_time_minutes":    self.boarding_time_minutes,
         }

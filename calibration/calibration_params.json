@@ -1,0 +1,143 @@
+{
+  "source": "MIMIC-IV-ED v2.2",
+  "generated_utc": "2026-06-25T23:34:51+00:00",
+  "n_stays_used": 424725,
+  "n_stays_excluded": 362,
+  "date_range": {
+    "start": "2110-01-11",
+    "end": "2212-04-05"
+  },
+  "arrivals": {
+    "observation_span_days": 37339.9,
+    "mean_arrivals_per_hour": 0.474,
+    "hourly_arrival_rate": [
+      0.321,
+      0.271,
+      0.222,
+      0.184,
+      0.159,
+      0.149,
+      0.173,
+      0.227,
+      0.32,
+      0.476,
+      0.621,
+      0.774,
+      0.738,
+      0.717,
+      0.701,
+      0.717,
+      0.715,
+      0.688,
+      0.653,
+      0.641,
+      0.582,
+      0.512,
+      0.445,
+      0.368
+    ],
+    "day_of_week_weight": [
+      0.1438,
+      0.1423,
+      0.1421,
+      0.1432,
+      0.1426,
+      0.1425,
+      0.1434
+    ]
+  },
+  "acuity_mix": {
+    "1": 0.0565,
+    "2": 0.3277,
+    "3": 0.5297,
+    "4": 0.0671,
+    "5": 0.0026,
+    "unknown": 0.0164
+  },
+  "admit_rate_by_acuity": {
+    "1": 0.716,
+    "2": 0.5413,
+    "3": 0.2688,
+    "4": 0.0196,
+    "5": 0.0082,
+    "overall": 0.372
+  },
+  "los_overall_hours": {
+    "n": 424725,
+    "median_hours": 5.46,
+    "mean_hours": 7.1,
+    "p90_hours": 13.5,
+    "lognormal_mu": 1.6891,
+    "lognormal_sigma": 0.7466
+  },
+  "los_by_acuity_hours": {
+    "1": {
+      "n": 24004,
+      "median_hours": 4.9,
+      "mean_hours": 6.06,
+      "p90_hours": 10.62,
+      "lognormal_mu": 1.5812,
+      "lognormal_sigma": 0.6746
+    },
+    "2": {
+      "n": 139192,
+      "median_hours": 6.37,
+      "mean_hours": 8.46,
+      "p90_hours": 17.42,
+      "lognormal_mu": 1.8814,
+      "lognormal_sigma": 0.7058
+    },
+    "3": {
+      "n": 224969,
+      "median_hours": 5.47,
+      "mean_hours": 6.93,
+      "p90_hours": 12.65,
+      "lognormal_mu": 1.6945,
+      "lognormal_sigma": 0.6961
+    },
+    "4": {
+      "n": 28493,
+      "median_hours": 2.72,
+      "mean_hours": 3.49,
+      "p90_hours": 5.9,
+      "lognormal_mu": 1.0006,
+      "lognormal_sigma": 0.6825
+    },
+    "5": {
+      "n": 1094,
+      "median_hours": 1.77,
+      "mean_hours": 2.38,
+      "p90_hours": 4.14,
+      "lognormal_mu": 0.4787,
+      "lognormal_sigma": 0.9092
+    }
+  },
+  "los_by_disposition_hours": {
+    "admitted": {
+      "n": 157990,
+      "median_hours": 6.23,
+      "mean_hours": 7.26,
+      "p90_hours": 12.28,
+      "lognormal_mu": 1.813,
+      "lognormal_sigma": 0.5898
+    },
+    "discharged": {
+      "n": 266735,
+      "median_hours": 4.95,
+      "mean_hours": 7.0,
+      "p90_hours": 14.87,
+      "lognormal_mu": 1.6157,
+      "lognormal_sigma": 0.8168
+    }
+  },
+  "disposition_mix": {
+    "HOME": 0.5685,
+    "ADMITTED": 0.372,
+    "TRANSFER": 0.0163,
+    "LEFT WITHOUT BEING SEEN": 0.0145,
+    "ELOPED": 0.0134,
+    "OTHER": 0.01,
+    "LEFT AGAINST MEDICAL ADVICE": 0.0044,
+    "EXPIRED": 0.0009
+  }
+}

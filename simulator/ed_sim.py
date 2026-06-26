@@ -1,13 +1,20 @@
 """
 Core ED simulation engine using SimPy.
 
-Models patient flow through 5 stages: arrival -> triage -> bed wait
--> treatment -> disposition. Uses 4 resource pools (triage nurses,
-ED beds, physicians, inpatient beds) with priority-based queueing.
+Models patient flow through 6 stages: arrival -> triage -> bed wait
+-> treatment -> diagnostic workup -> disposition. Uses 4 resource pools
+(triage nurses, ED beds, physicians, inpatient beds) with priority-based
+queueing.
 
 Higher ESI patients (sicker, lower ESI number) take priority for beds
 and physicians. The simulation is fully deterministic given the
 random_seed in Config.
+
+The diagnostic workup stage sits between treatment and disposition: the
+physician is released (free to see other patients) while the patient holds
+the ED bed waiting on labs, imaging, and consults. That wait is what
+dominates real ED length of stay, and modeling it is what lets the engine
+reproduce the real MIMIC-IV-ED length-of-stay gradient by acuity.
 """
 
 from __future__ import annotations
@@ -45,6 +52,43 @@ class EDSimulation:
         low, mode, high = low_mode_high
         return self.rng.triangular(low, mode, high)
 
+    def _diagnostic_wait(self, esi: int) -> float:
+        """
+        Total diagnostic workup time for a patient of the given ESI.
+
+        Workup runs as serial rounds (config.diagnostic_rounds[esi]). Within a
+        round, labs and imaging are ordered probabilistically and run
+        concurrently, so the round's duration is the slower of the two. Rounds
+        are summed because they happen in sequence (draw labs, wait, reassess,
+        re-image, etc.). A single specialist consult wait may be added on top.
+
+        The physician is NOT held during any of this; only the ED bed is.
+        """
+        cfg = self.config
+        total = 0.0
+
+        for _ in range(cfg.diagnostic_rounds[esi]):
+            lab_time = 0.0
+            imaging_time = 0.0
+
+            if self.rng.random() < cfg.lab_order_prob[esi]:
+                lab_time = self._triangular(cfg.lab_turnaround_minutes)
+
+            if self.rng.random() < cfg.imaging_order_prob[esi]:
+                if self.rng.random() < cfg.ct_given_imaging_prob[esi]:
+                    imaging_time = self._triangular(cfg.ct_turnaround_minutes)
+                else:
+                    imaging_time = self._triangular(cfg.xray_turnaround_minutes)
+
+            # Labs and imaging within a round run concurrently.
+            total += max(lab_time, imaging_time)
+
+        # Specialist consult, concentrated in higher acuity, added once.
+        if self.rng.random() < cfg.consult_prob[esi]:
+            total += self._triangular(cfg.consult_wait_minutes)
+
+        return total
+
     # -------------------------------------------------------------------------
     # The arrival process (Poisson via exponential inter-arrival times)
     # -------------------------------------------------------------------------
@@ -66,7 +110,7 @@ class EDSimulation:
             self.env.process(self.patient_flow(patient))
 
     # -------------------------------------------------------------------------
-    # Per-patient flow through the 5 stages
+    # Per-patient flow through the stages
     # -------------------------------------------------------------------------
     def patient_flow(self, patient: Patient):
         # ESI 1 = highest priority (lowest priority number in SimPy)
@@ -96,6 +140,15 @@ class EDSimulation:
                 )
                 yield self.env.timeout(treatment_duration)
                 patient.treatment_end_time = self.env.now
+            # Physician released here. Patient keeps the ED bed for the workup.
+
+            # ---- Stage 3b: Diagnostic workup (labs / imaging / consults) ----
+            # No physician held during this wait; the ED bed is still occupied.
+            # This is the stage that makes ED length of stay realistic.
+            patient.diagnostic_start_time = self.env.now
+            diagnostic_duration = self._diagnostic_wait(patient.esi)
+            yield self.env.timeout(diagnostic_duration)
+            patient.diagnostic_end_time = self.env.now
 
             # ---- Stage 4: Disposition decision ----
             disposition_duration = self._triangular(
