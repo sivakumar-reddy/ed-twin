@@ -263,7 +263,9 @@ The calibration fits the model's stochastic inputs to the empirical structure of
 | Frontend | **Hand authored SVG** | Chart and patient flow diagram, no charting dependency |
 | Hosting | **Vercel** | Continuous deployment |
 
----## Repository structure
+---
+
+## Repository structure
 
 ```
 ed-twin/
