@@ -88,11 +88,11 @@ No data is simulated in your browser. The application serves precomputed, aggreg
 
 ---
 
-## See it in action
+<!-- See it in action: record docs/images/demo.gif later (inpatient lever crossing the cliff), then uncomment.
 
-> Add `docs/images/demo.gif`. One clip showing the inpatient lever crossing the cliff, the operating point collapsing, and the flow diagram lighting up is worth more than any paragraph here.
 
-![Changing the levers and watching the constraint move](docs/images/demo.gif)
+
+![Changing the levers and watching the constraint move](docs/images/demo.gif) -->
 
 ---
 
