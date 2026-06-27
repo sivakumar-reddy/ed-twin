@@ -263,34 +263,37 @@ The calibration fits the model's stochastic inputs to the empirical structure of
 | Frontend | **Hand authored SVG** | Chart and patient flow diagram, no charting dependency |
 | Hosting | **Vercel** | Continuous deployment |
 
----
-
-## Repository structure
+---## Repository structure
 
 ```
 ed-twin/
-├── simulator/
-│   ├── config.py          # baseline parameters and lever definitions
-│   ├── ed_sim.py          # the SimPy process model
-│   ├── patient.py         # patient generation and journey
-│   └── metrics.py         # aggregation, confidence intervals, stability detection
-├── scripts/
-│   └── 09_generate_sweeps.py   # runs the one factor at a time sweep
-├── calibration/           # calibration against MIMIC-IV-ED (raw data not included)
-├── data/
-│   └── sweeps/            # generated simulation outputs
-└── web/
-    ├── app/
-    │   ├── layout.tsx
-    │   ├── page.tsx
-    │   └── globals.css
-    ├── components/
-    │   ├── EDConsole.tsx  # the interactive client component
-    │   └── edStyles.ts    # scoped styles
-    ├── lib/
-    │   └── edModel.ts     # typed, pure model: geometry, interpretation, tour
-    └── data/
-        └── ed_sweeps.json # aggregated sweep results consumed by the app
+├── simulator/              # the SimPy discrete-event model
+│   ├── ed_sim.py           # core process model: patient flow, resources, queues
+│   ├── patient.py          # patient generation, acuity, journey
+│   ├── config.py           # baseline parameters and lever definitions
+│   ├── metrics.py          # aggregation, confidence intervals, stability detection
+│   └── scenarios.py        # named scenario definitions
+├── calibration/            # fit to MIMIC-IV-ED v2.2 (raw data gitignored per DUA)
+│   ├── ed_calibration.py   # fits arrival, acuity, and service distributions
+│   └── calibration_params.json   # aggregate fitted parameters only
+├── scripts/                # pipeline stages, run in order
+│   ├── 06_run_simulation.py
+│   ├── 07_run_scenarios.py
+│   ├── 09_generate_sweeps.py     # one-factor-at-a-time sweep across every lever
+│   └── 10_generate_figures.py    # renders the README figures from sweep output
+├── data/sweeps/            # generated steady-state sweep results (app + figures read this)
+├── docs/
+│   ├── images/             # baseline, cliff, and hero figures (real-data, reproducible)
+│   ├── bottleneck_analysis.md    # written analysis of the binding constraint
+│   └── phase3_simulation_design.md
+├── web/                    # Next.js + TypeScript interactive front end (Vercel)
+│   ├── app/                # routes, layout, global styles
+│   ├── components/         # EDConsole: the interactive client component
+│   ├── lib/edModel.ts      # typed, pure model: geometry, interpretation, tour
+│   └── data/ed_sweeps.json # aggregated results served to the app
+├── archive/                # earlier Synthea-based iteration, kept to show evolution
+├── requirements.txt
+└── README.md
 ```
 
 ---
