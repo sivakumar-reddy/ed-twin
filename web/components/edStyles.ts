@@ -208,6 +208,14 @@ export const ED_STYLES = `@import url('https://fonts.googleapis.com/css2?family=
     main{display:grid; grid-template-columns:1fr; gap:16px; height:auto; flex:none; padding-top:16px;}
     .col{min-height:0;}
 
+    /* lift the payoff up: chart first, then the STABLE/length-of-stay/utilization
+       readout, then the levers + slider + patient-flow list last. matches the
+       desktop "everything important first" feel and keeps the live numbers
+       sitting right above the slider when you do scroll down to drag it. */
+    main > .col:nth-child(2){order:1;}   /* chart */
+    main > .col:nth-child(3){order:2;}   /* readout: status, 332, utilization */
+    main > .col:nth-child(1){order:3;}   /* levers, slider, patient flow */
+
     /* chart can no longer collapse to zero: give it a real height */
     .chart-card{flex:none;}
     .chart-head{flex-wrap:wrap;}
