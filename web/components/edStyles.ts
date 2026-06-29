@@ -188,4 +188,42 @@ export const ED_STYLES = `@import url('https://fonts.googleapis.com/css2?family=
   .tbtn.ghost{border-color:transparent; color:var(--faint)}
   .tbtn.ghost:hover{color:var(--muted)}
   .tbtn:disabled{opacity:.32; cursor:default; color:var(--faint)}
+
+  /* ============================================================
+     RESPONSIVE: phones (portrait + landscape) and small tablets.
+     Desktop layout above is untouched. Fixes: right panel clipped
+     in portrait, chart vanishing in landscape, bottom cut off.
+     ============================================================ */
+  @media (max-width: 900px){
+    /* make the app the vertical scroll container instead of clipping */
+    .edtwin{height:100%; overflow-x:hidden; overflow-y:auto; -webkit-overflow-scrolling:touch;}
+    .wrap{height:auto; min-height:100%; max-width:100%; padding:14px 14px 20px;}
+
+    /* header stacks so chips don't push off-screen */
+    header{flex-direction:column; align-items:flex-start; gap:12px;}
+    .header-right{flex-direction:column-reverse; align-items:flex-start; gap:12px; width:100%;}
+    .chips{justify-content:flex-start; max-width:100%;}
+
+    /* the key fix: three columns become one full-width stack */
+    main{display:grid; grid-template-columns:1fr; gap:16px; height:auto; flex:none; padding-top:16px;}
+    .col{min-height:0;}
+
+    /* chart can no longer collapse to zero: give it a real height */
+    .chart-card{flex:none;}
+    .chart-head{flex-wrap:wrap;}
+    .chart-title{font-size:19px;}
+    svg{height:300px; flex:none;}
+
+    /* right rail and flow render at natural height, full width */
+    #rightCard{flex:none !important;}
+    .flow{flex:none;}
+    .stages{flex:none; justify-content:flex-start; gap:13px;}
+    .spine-pulse{display:none;}
+  }
+
+  /* very short landscape phones: slightly shorter chart so more fits */
+  @media (max-width: 900px) and (max-height: 480px){
+    svg{height:240px;}
+  }
+
 `;
